@@ -1,172 +1,202 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ธีรภัทร์ คำยวง | Web Developer</title>
+
+  <!-- Bootstrap 3.4.1 & jQuery -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <!-- Google Fonts: Prompt -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <link href="myy.css" rel="stylesheet">
 </head>
-<body>
+<body id="top">
 
-<header class="site">
-  <nav class="wrap">
-    <a class="brand" href="#top">TEERAPAT KAMYUANG</a>
-    <div class="nav-links">
-      <a href="#work">ผลงาน</a>
-      <a href="#about">เกี่ยวกับ</a>
-      <a href="#contact">ติดต่อ</a>
+<!-- NAVBAR (Bootstrap Fixed Top + Collapse Menu) -->
+<nav class="navbar navbar-default navbar-fixed-top custom-nav">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-menu">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand brand-logo" href="#top">TEERAPAT.K</a>
     </div>
-  </nav>
-</header>
 
-<main id="top">
+    <div class="collapse navbar-collapse" id="navbar-menu">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#work">ผลงาน</a></li>
+        <li><a href="certificates.html">เกียรติบัตร</a></li>
+        <li><a href="#about">เกี่ยวกับ</a></li>
+        <li><a href="#contact">ติดต่อ</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
-  <!-- HERO SECTION -->
-  <section class="hero wrap">
-    <div class="hero-grid">
-      <div class="hero-text">
+<!-- HERO SECTION -->
+<section class="hero-section">
+  <div class="container">
+    <div class="row hero-align">
+      <div class="col-md-7 col-sm-12">
         <div class="status-badge">
           <span class="status-dot"></span> พร้อมรับงานฝึกงาน (Internship)
         </div>
-        <h1>Portfolio</h1>
-        <p class="lede">นักศึกษา ICT มหาวิทยาลัยศรีปทุม มุ่งเน้นการสร้าง Responsive Web และระบบเชื่อมต่ออัตโนมัติด้วย HTML5, CSS3, Java และ Git/GitHub</p>
+        <h1 class="hero-title">Portfolio</h1>
+        <p class="hero-desc">
+          นักศึกษา ICT มหาวิทยาลัยศรีปทุม มุ่งเน้นการสร้าง Responsive Web และการพัฒนาตรรกะโปรแกรมด้วย HTML5, CSS3, Java และ Git/GitHub
+        </p>
       </div>
-      <div class="hero-meta-card">
-        <div class="meta-item">
-          <strong>บทบาท</strong>
-          <span>Web Developer / Intern</span>
-        </div>
-        <div class="meta-item">
-          <strong>ที่ตั้ง</strong>
-          <span>กรุงเทพฯ ประเทศไทย</span>
-        </div>
-        <div class="meta-item">
-          <strong>การศึกษา</strong>
-          <span>ปี 4 · ICT ม.ศรีปทุม</span>
+
+      <div class="col-md-5 col-sm-12">
+        <div class="meta-card">
+          <div class="meta-row">
+            <span class="meta-label">บทบาท</span>
+            <span class="meta-value">Web Developer / Intern</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">ที่ตั้ง</span>
+            <span class="meta-value">กรุงเทพฯ ประเทศไทย</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">การศึกษา</span>
+            <span class="meta-value">ปี 4 · ICT ม.ศรีปทุม</span>
+          </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- PROJECTS SECTION -->
-  <section class="section wrap" id="work">
-    <div class="section-head">
+<!-- PROJECTS SECTION -->
+<section class="section-padding" id="work">
+  <div class="container">
+    <div class="section-title-wrap">
       <h2>ผลงานคัดสรร</h2>
       <p>โปรเจกต์พัฒนาเว็บไซต์ และเกียรติบัตรรับรองความสามารถ</p>
     </div>
 
-    <div class="projects-list">
+    <div class="row">
       <!-- Project 1 -->
-      <article class="project-card">
-        <div class="art">
-          <span class="art-icon">💻</span>
-        </div>
-        <div class="info">
-          <div class="cat">Web &amp; Logic · Java / HTML5 / CSS3</div>
-          <h3>Basic Web &amp; Logic Application</h3>
-          <p>พัฒนาหน้าเว็บและระบบประมวลผลพื้นฐาน โดยใช้ HTML5 วางโครงสร้าง Semantic จัดสไตล์ด้วย CSS3 และประยุกต์ใช้ตรรกะภาษา Java ในการจัดการและแสดงผลข้อมูล</p>
-          <a class="btn-link" href="https://github.com/KuroMark13" target="_blank">ดูโปรเจกต์บน GitHub ↗</a>
-        </div>
-      </article>
-      
-      <!-- Project 2: Certificate -->
-      <article class="project-card cert-card">
-        <div class="art cert-art">
-          <span class="art-icon">📜</span>
-        </div>
-        <div class="info">
-          <div class="cat">Certification</div>
-          <h3>เกียรติบัตรและใบประกาศนียบัตร</h3>
-          <p>ผ่านการอบรมและพัฒนาทักษะด้านเทคโนโลยีสารสนเทศ การเขียนโปรแกรม และกิจกรรมเสริมสร้างทักษะวิชาชีพ</p>
-          <a class="btn-link" href="https://www.linkedin.com/in/teerapat-kamyuang-30a605290/" target="_blank">ดูเกียรติบัตรฉบับเต็มบน LinkedIn ↗</a>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <!-- ABOUT SECTION -->
-  <section class="section wrap" id="about">
-    <div class="section-head">
-      <h2>เกี่ยวกับฉัน</h2>
-      <p>ความเป็นมา ทักษะความเชี่ยวชาญ และเครื่องมือที่ใช้งาน</p>
-    </div>
-    
-    <div class="about-grid">
-      <div class="about-desc">
-        <p>กำลังศึกษาชั้นปีที่ 4 สาขาเทคโนโลยีสารสนเทศและการสื่อสาร (ICT) มหาวิทยาลัยศรีปทุม มีความสนใจเป็นพิเศษด้านการพัฒนาเว็บไซต์ (Web Development) และการจัดโครงสร้างโค้ดอย่างเป็นระเบียบ</p>
-        <p>มีประสบการณ์ลงมือสร้างโปรเจกต์จริงในระดับพื้นฐาน ทั้งการสร้างหน้าเว็บแบบ Responsive, การเขียนคำสั่งจัดการข้อมูล และการใช้ Git เพื่อควบคุมเวอร์ชัน พร้อมเปิดรับการเรียนรู้สิ่งใหม่และพัฒนาทักษะร่วมกับทีม</p>
-      </div>
-
-      <div class="skills-block">
-        <div class="skill-group">
-          <h4>เครื่องมือและภาษา</h4>
-          <div class="tag-cloud">
-            <span class="tag">Java (OOP Basics)</span>
-            <span class="tag">HTML5 / CSS3</span>
-            <span class="tag">Git &amp; GitHub</span>
-            <span class="tag">VS Code</span>
+      <div class="col-md-6 col-sm-12">
+        <div class="custom-card">
+          <div class="card-icon-header icon-code">
+            <span class="glyphicon glyphicon-console"></span>
+          </div>
+          <div class="card-content">
+            <span class="card-tag">Web &amp; Logic · Java / HTML5 / CSS3</span>
+            <h3>Basic Web &amp; Logic Application</h3>
+            <p>พัฒนาหน้าเว็บและระบบประมวลผลพื้นฐาน โดยใช้ HTML5 ในการวางโครงสร้าง จัดสไตล์ด้วย CSS3 และประยุกต์ใช้ตรรกะภาษา Java ในการจัดการและแสดงผลข้อมูล</p>
+            <a class="card-btn-link" href="https://github.com/KuroMark13" target="_blank">ดูโปรเจกต์บน GitHub ↗</a>
           </div>
         </div>
-        <div class="skill-group">
-          <h4>ทักษะและความถนัด</h4>
-          <ul class="skill-list">
-            <li>สร้างโครงสร้างหน้าเว็บ (Semantic HTML5)</li>
-            <li>จัดสไตล์และเลย์เอาต์หน้าจอ (CSS Flexbox)</li>
-            <li>การคิดเชิงตรรกะและการเขียนโปรแกรมเชิงวัตถุ (Java OOP)</li>
-            <li>การค้นคว้าและแก้ไขปัญหาโค้ดเบื้องต้น (Debugging)</li>
+      </div>
+
+      <!-- Project 2: Link to Certificates -->
+      <div class="col-md-6 col-sm-12">
+        <div class="custom-card">
+          <div class="card-icon-header icon-cert">
+            <span class="glyphicon glyphicon-education"></span>
+          </div>
+          <div class="card-content">
+            <span class="card-tag">Certification</span>
+            <h3>เกียรติบัตรและใบประกาศนียบัตร</h3>
+            <p>ผ่านการอบรมและพัฒนาทักษะด้านเทคโนโลยีสารสนเทศ การเขียนโปรแกรม และกิจกรรมเสริมสร้างทักษะวิชาชีพในรั้วมหาวิทยาลัย</p>
+            <a class="card-btn-link" href="certificates.html">ดูเกียรติบัตรทั้งหมด ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT SECTION -->
+<section class="section-padding bg-light-section" id="about">
+  <div class="container">
+    <div class="section-title-wrap">
+      <h2>เกี่ยวกับฉัน</h2>
+      <p>ประวัติ ทักษะความเชี่ยวชาญ และเครื่องมือที่ใช้งาน</p>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 col-sm-12">
+        <div class="about-text">
+          <p>กำลังศึกษาชั้นปีที่ 4 สาขาเทคโนโลยีสารสนเทศและการสื่อสาร (ICT) มหาวิทยาลัยศรีปทุม มีความสนใจเป็นพิเศษด้านการพัฒนาเว็บไซต์ (Web Development) และการจัดโครงสร้างโค้ดให้มีประสิทธิภาพ</p>
+          <p>มีประสบการณ์ลงมือสร้างโปรเจกต์จริงในระดับพื้นฐาน ทั้งการทำหน้าเว็บแบบ Responsive, การเขียนตรรกะควบคุมข้อมูล และการใช้ระบบควบคุมเวอร์ชัน (Git) พร้อมเปิดรับสิ่งใหม่และพัฒนาทักษะร่วมกับทีม</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-sm-12">
+        <div class="skills-box">
+          <h4>เครื่องมือและภาษา</h4>
+          <div class="badge-tags">
+            <span class="skill-badge">Java (OOP Basics)</span>
+            <span class="skill-badge">HTML5 / CSS3</span>
+            <span class="skill-badge">Git &amp; GitHub</span>
+          </div>
+
+          <h4 style="margin-top: 25px;">ทักษะและความถนัด</h4>
+          <ul class="styled-list">
+            <li>สร้างโครงสร้างหน้าเว็บตามมาตรฐาน (Semantic HTML5)</li>
+            <li>จัดสไตล์และออกแบบ Responsive Layout (CSS &amp; Bootstrap)</li>
+            <li>แนวคิดการเขียนโปรแกรมเชิงวัตถุและการคิดเชิงตรรกะ (Java OOP)</li>
+            <li>การค้นคว้าและแก้ไขปัญหาโค้ดเบื้องต้น (Basic Debugging)</li>
           </ul>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- CONTACT SECTION -->
-  <section class="section contact-section wrap" id="contact">
-    <div class="contact-wrapper">
-      <div class="contact-header">
-        <h2>ติดต่อพูดคุย</h2>
-        <p>พร้อมเปิดรับโอกาสฝึกงานและร่วมงานด้าน Web Development</p>
-      </div>
+<!-- CONTACT SECTION -->
+<section class="section-padding" id="contact">
+  <div class="container">
+    <div class="contact-box-card text-center">
+      <h2>ติดต่อพูดคุย</h2>
+      <p>พร้อมเปิดรับโอกาสฝึกงานและร่วมงานด้าน Web Development</p>
 
-      <!-- ช่องทางติดต่อหลัก: 2 คอลัมน์สมดุลกัน -->
-      <div class="direct-contact-grid">
-        <a class="contact-item" href="mailto:gokyip579@gmail.com">
-          <div class="icon-box">✉️</div>
-          <div class="contact-info">
-            <span class="label">Email</span>
-            <span class="value">gokyip579@gmail.com</span>
-          </div>
-        </a>
-
-        <a class="contact-item" href="tel:0636402994">
-          <div class="icon-box">📞</div>
-          <div class="contact-info">
-            <span class="label">Phone</span>
-            <span class="value">063-640-2994</span>
-          </div>
-        </a>
-      </div>
-
-      <!-- โซเชียลมีเดีย: จัดแถวกลางสไตล์มินิมอล -->
-      <div class="social-row">
-        <span class="social-label">ช่องทางออนไลน์:</span>
-        <div class="social-buttons">
-          <a class="social-btn" href="https://github.com/KuroMark13" target="_blank">GitHub ↗</a>
-          <a class="social-btn" href="https://www.facebook.com/teerapat.kamyuang" target="_blank">Facebook ↗</a>
-          <a class="social-btn" href="https://www.instagram.com/kuro_kujo05" target="_blank">Instagram ↗</a>
+      <div class="row contact-btn-group">
+        <div class="col-sm-6 col-md-4 col-md-offset-2">
+          <a class="contact-action-btn primary-contact" href="mailto:gokyip579@gmail.com">
+            <span class="glyphicon glyphicon-envelope"></span> gokyip579@gmail.com
+          </a>
+        </div>
+        <div class="col-sm-6 col-md-4">
+          <a class="contact-action-btn primary-contact" href="tel:0636402994">
+            <span class="glyphicon glyphicon-earphone"></span> 063-640-2994
+          </a>
         </div>
       </div>
-    </div>
-  </section>
-</main>
 
-<footer class="site">
-  <div class="wrap footer-content">
-    <span>© 2568 ธีรภัทร์ คำยวง (Teerapat Kamyuang)</span>
-    <a href="#top">กลับขึ้นด้านบน ↑</a>
+      <div class="social-links-area">
+        <span class="social-text">ช่องทางออนไลน์:</span>
+        <a class="btn btn-default custom-social-btn" href="https://github.com/KuroMark13" target="_blank">GitHub ↗</a>
+        <a class="btn btn-default custom-social-btn" href="https://www.facebook.com/teerapat.kamyuang" target="_blank">Facebook ↗</a>
+        <a class="btn btn-default custom-social-btn" href="https://www.instagram.com/kuro_kujo05" target="_blank">Instagram ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6 text-left">
+        <span>© 2568 ธีรภัทร์ คำยวง (Teerapat Kamyuang)</span>
+      </div>
+      <div class="col-sm-6 text-right">
+        <a href="#top">กลับขึ้นด้านบน ↑</a>
+      </div>
+    </div>
   </div>
 </footer>
 
