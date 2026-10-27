@@ -6,28 +6,66 @@
 
 /* ---------- ส่วนที่ 1: ข้อมูลใบประกาศ ----------
    - 1 ก้อน { ... } = 1 ใบประกาศ
-   - ใบที่อยู่บนสุดจะแสดงเป็นใบแรก (ใส่ใบใหม่ไว้บนสุดได้เลย)
+   - ใบที่อยู่บนสุดจะแสดงเป็นใบแรก (ย้ายก้อนขึ้น-ลงเพื่อเรียงลำดับได้)
    - ต้องมีเครื่องหมายจุลภาค "," คั่นระหว่างแต่ละก้อน (ก้อนสุดท้ายไม่ต้องมี)
    - ช่องที่ไม่มีข้อมูล ให้ปล่อยเป็น "" ได้ เว็บจะไม่แสดงช่องนั้น
+   - dateLabel = คำนำหน้าวันที่ (ถ้าไม่ใส่ จะขึ้นว่า "ได้รับเมื่อ")
    - ชื่อไฟล์ใช้ตัวพิมพ์เล็ก ภาษาอังกฤษ ไม่มีช่องว่าง เช่น cert-01.jpg
 */
 const certificates = [
   {
-    title: "เกียรติบัตรเข้าร่วมกิจกรรมวิชาการด้านไอที",      // ชื่อใบประกาศ
-    course: "กิจกรรมและเวิร์กชอปเสริมสร้างทักษะวิชาชีพด้านไอที", // ชื่อหลักสูตร/กิจกรรม
-    issuer: "มหาวิทยาลัยศรีปทุม",                          // หน่วยงานที่ออก
-    date: "",                                              // วันที่ได้รับ เช่น "15 มีนาคม 2568"
-    image: "images/certificates/cert-01.jpg",              // รูปใบประกาศ
-    file: "files/certificates/cert-03.pdf",                // ไฟล์ PDF (ถ้ามี) เช่น "files/certificates/cert-01.pdf"
-    link: "https://www.linkedin.com/in/teerapat-kamyuang-30a605290/" // ลิงก์ภายนอก (ถ้ามี)
+    title: "HCCDA-AI",
+    course: "Huawei Cloud Developer Certification (Certified Developer Associate)",
+    issuer: "Huawei Cloud",
+    dateLabel: "ใช้ได้ถึง",
+    date: "21 กรกฎาคม 2572",
+    image: "images/certificates/cert-03.jpg",
+    file: "",
+    link: ""
   },
   {
-    title: "Web Development & Programming Fundamentals",
-    course: "ความรู้พื้นฐานด้านการเขียนโปรแกรมและการพัฒนาเว็บไซต์",
-    issuer: "",
-    date: "",
+    title: "Basic Network สำหรับมือใหม่สาย IT",
+    course: "วุฒิบัตรการฝึกทักษะออนไลน์ (1 ชั่วโมง 40 นาที)",
+    issuer: "กรมพัฒนาฝีมือแรงงาน ร่วมกับ CIPAT",
+    date: "28 เมษายน 2568",
+    image: "images/certificates/cert-06.jpg",
+    file: "files/certificates/cert-06.pdf",
+    link: ""
+  },
+  {
+    title: "Cloud Basics: Development and Basic Concepts (CRA Training Program)",
+    course: "Certificate of Completion",
+    issuer: "Huawei Talent",
+    date: "25 เมษายน 2568",
+    image: "images/certificates/cert-01.jpg",
+    file: "",
+    link: ""
+  },
+  {
+    title: "Development and Basic Concepts of Cloud Computing",
+    course: "Certificate of Completion",
+    issuer: "Huawei Talent",
+    date: "25 เมษายน 2568",
     image: "images/certificates/cert-02.jpg",
     file: "",
+    link: ""
+  },
+  {
+    title: "Google Data Analytics",
+    course: "Professional Certificate (8 courses)",
+    issuer: "Google · Coursera",
+    date: "17 พฤศจิกายน 2567",
+    image: "images/certificates/cert-05.jpg",
+    file: "files/certificates/cert-05.pdf",
+    link: "https://coursera.org/verify/professional-cert/LFH0EGFQV4UF"
+  },
+  {
+    title: "Basic Cybersecurity",
+    course: "Certificate of Completion",
+    issuer: "MOOC · NCSA Thailand",
+    date: "23 มีนาคม 2567",
+    image: "images/certificates/cert-04.jpg",
+    file: "files/certificates/cert-04.pdf",
     link: ""
   }
 ];
@@ -113,7 +151,7 @@ const certificates = [
     if (c.issuer) body.appendChild(el("span", "card-tag", c.issuer));
     body.appendChild(el("h3", "cert-title", c.title));
     if (c.course) body.appendChild(el("p", "cert-course", c.course));
-    if (c.date) body.appendChild(el("p", "cert-date", "ได้รับเมื่อ: " + c.date));
+    if (c.date) body.appendChild(el("p", "cert-date", (c.dateLabel || "ได้รับเมื่อ") + ": " + c.date));
 
     var actions = el("div", "cert-actions");
     var pdf = safeUrl(c.file);
