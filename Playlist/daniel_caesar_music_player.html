@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playlist - Daniel Caesar</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    },
+                    colors: {
+                        gold: {
+                            400: '#F3E5AB',
+                            500: '#D4AF37',
+                            600: '#AA820A',
+                        },
+                        amber: {
+                            950: '#1c0f06',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Customizations & Animations */
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #08070b;
+            color: #f3f4f6;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Styles */
+        .glass-card {
+            background: rgba(18, 15, 25, 0.55);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-pill {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .glass-pill:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        /* Audio Reactive Pulsing Halo Behind Vinyl */
+        .halo-glow {
+            position: absolute;
+            inset: -20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.5) 0%, rgba(30, 58, 138, 0.3) 45%, rgba(0,0,0,0) 70%);
+            filter: blur(30px);
+            opacity: 0.4;
+            transition: all 0.5s ease;
+            transform: scale(0.95);
+        }
+        .halo-glow.playing {
+            opacity: 0.85;
+            animation: pulse-halo 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse-halo {
+            0% {
+                transform: scale(0.98) rotate(0deg);
+                filter: blur(28px);
+                background: radial-gradient(circle, rgba(212, 175, 55, 0.5) 0%, rgba(225, 29, 72, 0.3) 50%, rgba(0,0,0,0) 75%);
+            }
+            50% {
+                transform: scale(1.08) rotate(180deg);
+                filter: blur(40px);
+                background: radial-gradient(circle, rgba(168, 85, 247, 0.55) 0%, rgba(212, 175, 55, 0.35) 50%, rgba(0,0,0,0) 75%);
+            }
+            100% {
+                transform: scale(1.02) rotate(360deg);
+                filter: blur(32px);
+                background: radial-gradient(circle, rgba(234, 88, 12, 0.5) 0%, rgba(147, 51, 234, 0.3) 50%, rgba(0,0,0,0) 75%);
+            }
+        }
+
+        /* Spinning Vinyl Record Styling */
+        .vinyl-container {
+            perspective: 1000px;
+        }
+
+        .vinyl-record {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, 
+                #111 0%, 
+                #111 18%, 
+                #d4af37 19%, 
+                #d4af37 20%, 
+                #090909 21%, 
+                #1c1c1c 30%, 
+                #0d0d0d 35%, 
+                #222 45%, 
+                #0d0d0d 55%, 
+                #1f1f1f 65%, 
+                #0a0a0a 75%, 
+                #1a1a1a 85%, 
+                #050505 100%);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 0 15px rgba(255,255,255,0.1);
+            animation: spin 16s linear infinite;
+            animation-play-state: paused;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.27);
+        }
+
+        .vinyl-record.playing {
+            animation-play-state: running;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Vinyl Grooves & Reflection Overlay */
+        .vinyl-reflection {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 40%, rgba(255,255,255,0.08) 60%, rgba(255,255,255,0) 100%);
+            pointer-events: none;
+        }
+
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 14px;
+            width: 14px;
+            border-radius: 50%;
+            background: #D4AF37;
+            cursor: pointer;
+            margin-top: -5px;
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.8);
+            transition: transform 0.15s ease, background-color 0.15s ease;
+        }
+
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.3);
+            background: #fff;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 9999px;
+        }
+
+        /* Custom Scrollbar for Playlist & Lyrics */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(212, 175, 55, 0.3);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(212, 175, 55, 0.6);
+        }
+
+        /* Lyrics Highlight Animation */
+        .lyric-line {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0.4;
+            transform: scale(0.96);
+            transform-origin: left center;
+        }
+        .lyric-line.active {
+            opacity: 1;
+            transform: scale(1.04);
+            color: #D4AF37;
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Equalizer Bar Animation */
+        .eq-bar {
+            width: 3px;
+            background-color: #D4AF37;
+            border-radius: 3px;
+            animation: eqPulse 1.2s ease-in-out infinite alternate;
+        }
+        .eq-bar:nth-child(1) { height: 60%; animation-delay: 0.1s; }
+        .eq-bar:nth-child(2) { height: 100%; animation-delay: 0.3s; }
+        .eq-bar:nth-child(3) { height: 40%; animation-delay: 0.2s; }
+        .eq-bar:nth-child(4) { height: 80%; animation-delay: 0.4s; }
+
+        @keyframes eqPulse {
+            0% { transform: scaleY(0.3); }
+            100% { transform: scaleY(1); }
+        }
+    </style>
+</head>
+<body class="min-h-screen relative flex flex-col justify-between items-center selection:bg-yellow-500/30 selection:text-yellow-200">
+
+    <!-- Interactive Ambient Canvas Background -->
+    <canvas id="bg-canvas" class="fixed inset-0 w-full h-full -z-10 pointer-events-none"></canvas>
+
+    <!-- Header Navigation -->
+    <header class="w-full max-w-7xl px-6 py-6 flex justify-between items-center z-20">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-yellow-600 via-amber-500 to-purple-600 flex items-center justify-center p-[2px] shadow-lg shadow-yellow-500/20">
+                <div class="w-full h-full bg-black rounded-full flex items-center justify-center">
+                    <span class="font-serif italic font-bold text-yellow-400 text-lg">MK</span>
+                </div>
+            </div>
+            <div>
+                <h1 class="font-bold tracking-wider text-sm text-gray-100 uppercase">Daniel Caesar</h1>
+                <p class="text-xs text-yellow-500/80 font-medium tracking-widest uppercase">Playlist</p>
+            </div>
+        </div>
+
+        <!-- Visual Theme Controls & Lyrics Toggle -->
+        <div class="flex items-center gap-3">
+            <!-- Theme Mode Selector Dropdown/Pills -->
+            <div class="hidden sm:flex items-center glass-pill rounded-full p-1 text-xs font-medium">
+                <button onclick="setThemeMode('mesh')" id="btn-theme-mesh" class="px-3 py-1.5 rounded-full transition-all text-blue-400 bg-white/10 shadow">
+                    💙 Cobalt Glow
+                </button>
+                <button onclick="setThemeMode('stars')" id="btn-theme-stars" class="px-3 py-1.5 rounded-full transition-all text-gray-400 hover:text-white">
+                    🌌 Starry Night
+                </button>
+                <button onclick="setThemeMode('sunset')" id="btn-theme-sunset" class="px-3 py-1.5 rounded-full transition-all text-gray-400 hover:text-white">
+                    🌅 Neon Sunset
+                </button>
+            </div>
+
+            <!-- Toggle Lyrics Button -->
+           <button id="toggle-lyrics-btn" onclick="toggleLyricsDrawer()" class="glass-pill px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 hover:border-yellow-500/50 transition-all">
+                <svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-2v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-2c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-2"/>
+                </svg>
+                <span>Lyrics</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="w-full max-w-7xl px-4 sm:px-6 my-auto py-4 z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            <!-- LEFT COLUMN: Album Cover / Vinyl & Primary Controls (7 cols on lg) -->
+            <div class="lg:col-span-7 flex flex-col items-center">
+                <div class="glass-card rounded-3xl p-6 sm:p-10 w-full max-w-lg relative overflow-hidden">
+                    
+                    <!-- Top Status Bar -->
+                    <div class="flex justify-between items-center mb-8">
+                        <span class="text-xs font-semibold tracking-widest text-yellow-500/90 uppercase flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-yellow-400 animate-ping"></span>
+                            Daniel Caesar
+                        </span>
+                        
+                        <!-- Equalizer Animation (visible when playing) -->
+                        <div id="equalizer" class="flex items-end gap-1 h-4 opacity-0 transition-opacity duration-300">
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                        </div>
+                    </div>
+
+                    <!-- Audio Reactive Halo & Vinyl Centerpiece -->
+                    <div class="relative w-64 h-64 sm:w-72 sm:h-72 mx-auto mb-8 flex items-center justify-center">
+                        <!-- Glowing Halo Ring -->
+                        <div id="halo-ring" class="halo-glow"></div>
+                        
+                        <!-- Vinyl Record Wrapper -->
+                        <div class="vinyl-container relative w-full h-full flex items-center justify-center">
+                            <div id="vinyl-disc" class="vinyl-record relative flex items-center justify-center p-3">
+                                <div class="vinyl-reflection"></div>
+                                <!-- Center Album Art Image -->
+                                <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-black/80 shadow-2xl relative">
+                                    <img id="album-cover" src="https://i.scdn.co/image/ab67616d0000b2733138f891f3075c9c5d944037" alt="Album Cover" class="w-full h-full object-cover">
+                                    <!-- Center Vinyl Hole -->
+                                    <div class="absolute inset-0 m-auto w-5 h-5 bg-black border-2 border-yellow-600/40 rounded-full shadow-inner"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Song Info -->
+                    <div class="text-center mb-6">
+                        <h2 id="song-title" class="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-1 truncate">Best Part (feat. H.E.R.)</h2>
+                        <p id="artist-name" class="text-sm text-yellow-500/90 font-medium">Daniel Caesar • <span id="album-name" class="text-gray-400">Freudian</span></p>
+                    </div>
+
+                    <!-- Seek Bar & Timers -->
+                    <div class="w-full mb-6">
+                        <input type="range" id="seek-bar" min="0" max="100" value="0" class="w-full">
+                        <div class="flex justify-between text-xs font-semibold text-gray-400 mt-2">
+                            <span id="current-time">0:00</span>
+                            <span id="total-duration">0:00</span>
+                        </div>
+                    </div>
+
+                    <!-- Controls Bar -->
+                    <div class="flex items-center justify-between w-full max-w-xs mx-auto mb-6">
+                        <!-- Shuffle Button -->
+                        <button id="shuffle-btn" onclick="toggleShuffle()" class="text-gray-400 hover:text-yellow-400 transition-colors p-2" title="Shuffle">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h2m8 0h2a2 2 0 012 2v8a2 2 0 01-2 2h-2m-4-4l3 3m0 0l-3 3m3-3H3m18-8l-3-3m0 0l3-3m-3 3H10"/>
+                            </svg>
+                        </button>
+
+                        <!-- Previous Button -->
+                        <button id="prev-btn" onclick="playPrev()" class="text-gray-200 hover:text-white hover:scale-110 active:scale-95 transition-all p-2">
+                            <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+                            </svg>
+                        </button>
+
+                        <!-- Play / Pause Button -->
+                        <button id="play-btn" onclick="togglePlay()" class="w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-500 via-amber-400 to-yellow-600 text-black flex items-center justify-center shadow-xl shadow-yellow-500/30 hover:scale-105 active:scale-95 transition-all">
+                            <!-- Play Icon -->
+                            <svg id="play-icon" class="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                            <!-- Pause Icon (hidden initially) -->
+                            <svg id="pause-icon" class="w-8 h-8 hidden" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                            </svg>
+                        </button>
+
+                        <!-- Next Button -->
+                        <button id="next-btn" onclick="playNext()" class="text-gray-200 hover:text-white hover:scale-110 active:scale-95 transition-all p-2">
+                            <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+                            </svg>
+                        </button>
+
+                        <!-- Repeat Button -->
+                        <button id="repeat-btn" onclick="toggleRepeat()" class="text-gray-400 hover:text-yellow-400 transition-colors p-2" title="Repeat Mode">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Volume Bar Control -->
+                    <div class="flex items-center gap-3 w-full max-w-xs mx-auto pt-2 border-t border-white/5">
+                        <button id="mute-btn" onclick="toggleMute()" class="text-gray-400 hover:text-white transition-colors">
+                            <svg id="vol-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M11 5L6 9H2v6h4l5 4V5z"/>
+                            </svg>
+                        </button>
+                        <input type="range" id="volume-bar" min="0" max="1" step="0.01" value="0.8" class="w-full">
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: Playlist & Lyrics Tabs (5 cols on lg) -->
+            <div class="lg:col-span-5 flex flex-col h-[560px]">
+                <div class="glass-card rounded-3xl p-6 h-full flex flex-col overflow-hidden relative">
+                    
+                    <!-- Card Tabs Header -->
+                    <div class="flex items-center border-b border-white/10 pb-4 mb-4">
+                        <button id="tab-playlist-btn" onclick="switchRightTab('playlist')" class="text-sm font-bold text-yellow-400 border-b-2 border-yellow-400 pb-1 mr-6 transition-all">
+                            Top Tracks
+                        </button>
+                        <button id="tab-lyrics-btn" onclick="switchRightTab('lyrics')" class="text-sm font-semibold text-gray-400 hover:text-gray-200 pb-1 transition-all">
+                            Live Lyrics
+                        </button>
+                    </div>
+
+                    <!-- TAB 1: Playlist Container -->
+                    <div id="playlist-view" class="flex-1 overflow-y-auto custom-scrollbar pr-1 space-y-2">
+                        <!-- Dynamic Playlist Items rendered here -->
+                    </div>
+
+                    <!-- TAB 2: Lyrics Container (Hidden by default) -->
+                    <!---<div id="lyrics-view" class="hidden flex-1 overflow-y-auto custom-scrollbar pr-2 py-4 space-y-6 text-center">
+                        <p class="text-xs text-yellow-500/70 uppercase tracking-widest font-semibold mb-4">Synced Lyrics Preview</p>
+                        <div id="lyrics-lines-container" class="space-y-4">
+                            <!-- Lyrics populated via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full max-w-7xl px-6 py-4 text-center z-10 text-xs text-gray-500">
+        <p>Daniel Caesar R&B Music Experience • Visual Audio Player</p>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // --- DATA: Daniel Caesar Top Tracks with Audio Stream Links & Synced Lyrics ---
+        const playlist = [
+            {
+                id: 1,
+                title: "Best Part (feat. H.E.R.)",
+                artist: "Daniel Caesar",
+                album: "Freudian",
+                year: "2017",
+                duration: "3:29",
+                cover: "https://i.scdn.co/image/ab67616d0000b2733138f891f3075c9c5d944037",
+                audio: "Music/best_part.mp3",
+                lyrics: [
+                    { time: 0, text: "♪ (Smooth Acoustic Guitar Intro)" },
+                    { time: 5, text: "Oh, had I known, had I known..." },
+                    { time: 12, text: "If life is a movie, then you're the best part" },
+                    { time: 20, text: "You're the sunshine in my morning" },
+                    { time: 27, text: "You're the coffee in my cup" },
+                    { time: 35, text: "You're the water when I'm thirsty" },
+                    { time: 42, text: "You're my favorite song playing on repeat" },
+                    { time: 50, text: "If you love me, won't you say something?" },
+                    { time: 58, text: "I just wanna see how beautiful you are" },
+                    { time: 66, text: "You're the best part, oh..." }
+                ]
+            },
+            {
+                id: 2,
+                title: "Japanese Denim",
+                artist: "Daniel Caesar",
+                album: "Single",
+                year: "2016",
+                duration: "4:30",
+                cover: "https://th.bing.com/th/id/OIP.8tfG2ffyjsOms-j6O8Pm0AHaFE?w=237&h=180&c=7&r=0&o=7&pid=1.7&rm=3",
+                audio: "Music/japanese_denim.mp3",
+                lyrics: [
+                    { time: 0, text: "♪ (Electric Piano Groove)" },
+                    { time: 8, text: "I don't know where I'm going" },
+                    { time: 16, text: "My denim's tight, my heart is glowing" },
+                    { time: 25, text: "I'm hanging on to every word you say" },
+                    { time: 34, text: "I wish that I could stay with you all day" },
+                    { time: 45, text: "Blue jeans and golden soul" },
+                    { time: 55, text: "You make me feel whole again" }
+                ]
+            },
+            {
+                id: 3,
+                title: "Get You (feat. Kali Uchis)",
+                artist: "Daniel Caesar",
+                album: "Freudian",
+                year: "2017",
+                duration: "4:38",
+                cover: "https://th.bing.com/th/id/OIP.8tfG2ffyjsOms-j6O8Pm0AHaFE?w=237&h=180&c=7&r=0&o=7&pid=1.7&rm=3",
+                audio: "Music/get_you.mp3",
+                lyrics: [
+                    { time: 0, text: "♪ (Deep Bassline Intro)" },
+                    { time: 10, text: "Through droughts and famine, natural disasters" },
+                    { time: 20, text: "My baby has been around for me" },
+                    { time: 30, text: "Kingdoms may fall but we stand tall" },
+                    { time: 42, text: "Who would've thought I'd get you?" },
+                    { time: 52, text: "Look at us now, breaking all the rules" }
+                ]
+            },
+            {
+                id: 4,
+                title: "Always",
+                artist: "Daniel Caesar",
+                album: "NEVER ENOUGH",
+                year: "2023",
+                duration: "3:45",
+                cover: "https://tse3.mm.bing.net/th/id/OIP.u3eG0hMCNr91CfXxmdPEoQHaEK?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+                audio: "Music/always.mp3",
+                lyrics: [
+                    { time: 0, text: "♪ (Warm R&B Ballad)" },
+                    { time: 7, text: "Babe, I'm always here for you" },
+                    { time: 15, text: "Even when the skies turn grey" },
+                    { time: 25, text: "No matter where the road leads us" },
+                    { time: 36, text: "I'll love you always, always..." }
+                ]
+            },
+            {
+                id: 5,
+                title: "Cyanide",
+                artist: "Daniel Caesar",
+                album: "CASE STUDY 01",
+                year: "2019",
+                duration: "3:15",
+                cover: "https://tse2.mm.bing.net/th/id/OIP.gNAcGO18Ki6ZaTsCNQcwFQAAAA?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+                audio: "Music/cyanide.mp3",
+                lyrics: [
+                    { time: 0, text: "♪ (Caribbean Rhythm & Soul)" },
+                    { time: 6, text: "Sweet melody, intoxicating energy" },
+                    { time: 14, text: "Catching feelings under midnight lights" },
+                    { time: 24, text: "Pure honey with a touch of cyanide" },
+                    { time: 35, text: "Dancing in the dark together" }
+                ]
+            },
+            {
+                id: 6,
+                title: "Let Me Go",
+                artist: "Daniel Caesar",
+                album: "NEVER ENOUGH",
+                year: "2023",
+                duration: "3:36",
+                cover: "https://tse1.mm.bing.net/th/id/OIP.Qfxv4mEB8aZjIo1pBpY8KAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+                audio: "Music/let_me_go.mp3",
+                lyrics: [
+                    { time: 0, text: "♪ (Acoustic Folk R&B Fusion)" },
+                    { time: 8, text: "Maybe it's time to set sail" },
+                    { time: 18, text: "Before we burn out like a candle" },
+                    { time: 28, text: "If you love me, let me go free..." }
+                ]
+            },
+            {
+                id: 7,
+                title: "Toronto 2014 (feat. Mustafa)",
+                artist: "Daniel Caesar",
+                album: "NEVER ENOUGH",
+                year: "2023",
+                duration: "4:08",
+                cover: "https://tse1.mm.bing.net/th/id/OIP.Qfxv4mEB8aZjIo1pBpY8KAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+                audio: "Music/toronto_2014.mp3",
+                lyrics: [
+                    { time: 0, text: "♪ (Nostalgic Ambient Synth)" },
+                    { time: 10, text: "Take me back to 2014" },
+                    { time: 20, text: "Cold winter nights in Toronto" },
+                    { time: 32, text: "Dreaming big before the world knew our names" }
+                ]
+            }
+        ];
+
+        // --- STATE MANAGEMENT ---
+        let currentIndex = 0;
+        let isPlaying = false;
+        let isShuffle = false;
+        let repeatMode = 0; // 0: Off, 1: Repeat All, 2: Repeat One
+        let themeMode = 'mesh'; // 'mesh', 'stars', 'sunset'
+
+        // Audio Object
+        const audio = new Audio();
+
+        // --- DOM ELEMENTS ---
+        const albumCover = document.getElementById('album-cover');
+        const vinylDisc = document.getElementById('vinyl-disc');
+        const haloRing = document.getElementById('halo-ring');
+        const songTitle = document.getElementById('song-title');
+        const artistName = document.getElementById('artist-name');
+        const albumName = document.getElementById('album-name');
+        const currentTimeEl = document.getElementById('current-time');
+        const totalDurationEl = document.getElementById('total-duration');
+        const seekBar = document.getElementById('seek-bar');
+        const volumeBar = document.getElementById('volume-bar');
+        const playBtn = document.getElementById('play-btn');
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        const equalizer = document.getElementById('equalizer');
+        const playlistView = document.getElementById('playlist-view');
+        const lyricsView = document.getElementById('lyrics-view');
+        const lyricsLinesContainer = document.getElementById('lyrics-lines-container');
+        const shuffleBtn = document.getElementById('shuffle-btn');
+        const repeatBtn = document.getElementById('repeat-btn');
+
+        // --- PLAYER CONTROLS ---
+
+        function loadTrack(index) {
+            currentIndex = index;
+            const track = playlist[index];
+
+            songTitle.innerText = track.title;
+            artistName.innerText = track.artist;
+            albumName.innerText = track.album;
+            albumCover.src = track.cover;
+            audio.src = track.audio;
+
+            seekBar.value = 0;
+            currentTimeEl.innerText = "0:00";
+            totalDurationEl.innerText = track.duration;
+
+            renderPlaylist();
+            renderLyrics(track.lyrics);
+        }
+
+        function togglePlay() {
+            if (isPlaying) {
+                pauseTrack();
+            } else {
+                playTrack();
+            }
+        }
+
+        function playTrack() {
+            audio.play().then(() => {
+                isPlaying = true;
+                playIcon.classList.add('hidden');
+                pauseIcon.classList.remove('hidden');
+                vinylDisc.classList.add('playing');
+                haloRing.classList.add('playing');
+                equalizer.style.opacity = '1';
+                renderPlaylist();
+            }).catch(e => console.log('Audio playback interaction needed:', e));
+        }
+
+        function pauseTrack() {
+            audio.pause();
+            isPlaying = false;
+            pauseIcon.classList.add('hidden');
+            playIcon.classList.remove('hidden');
+            vinylDisc.classList.remove('playing');
+            haloRing.classList.remove('playing');
+            equalizer.style.opacity = '0';
+            renderPlaylist();
+        }
+
+        function playNext() {
+            if (isShuffle) {
+                let newIndex;
+                do {
+                    newIndex = Math.floor(Math.random() * playlist.length);
+                } while (newIndex === currentIndex && playlist.length > 1);
+                currentIndex = newIndex;
+            } else {
+                currentIndex = (currentIndex + 1) % playlist.length;
+            }
+            loadTrack(currentIndex);
+            playTrack();
+        }
+
+        function playPrev() {
+            currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+            loadTrack(currentIndex);
+            playTrack();
+        }
+
+        function toggleShuffle() {
+            isShuffle = !isShuffle;
+            shuffleBtn.classList.toggle('text-yellow-400', isShuffle);
+            shuffleBtn.classList.toggle('text-gray-400', !isShuffle);
+        }
+
+        function toggleRepeat() {
+            repeatMode = (repeatMode + 1) % 3;
+            if (repeatMode === 0) {
+                repeatBtn.className = "text-gray-400 hover:text-yellow-400 transition-colors p-2";
+                repeatBtn.title = "Repeat: Off";
+            } else if (repeatMode === 1) {
+                repeatBtn.className = "text-yellow-400 hover:text-yellow-300 transition-colors p-2";
+                repeatBtn.title = "Repeat: Playlist";
+            } else {
+                repeatBtn.className = "text-amber-500 font-bold hover:text-yellow-300 transition-colors p-2 relative";
+                repeatBtn.title = "Repeat: One Track";
+            }
+        }
+
+        function toggleMute() {
+            audio.muted = !audio.muted;
+            document.getElementById('vol-icon').style.opacity = audio.muted ? '0.3' : '1';
+        }
+
+        // --- AUDIO EVENTS ---
+        audio.addEventListener('timeupdate', () => {
+            if (isNaN(audio.duration)) return;
+
+            // Seekbar update
+            const progress = (audio.currentTime / audio.duration) * 100;
+            seekBar.value = progress;
+
+            // Time text
+            currentTimeEl.innerText = formatTime(audio.currentTime);
+            totalDurationEl.innerText = formatTime(audio.duration);
+
+            // Sync lyrics highlight
+            updateLyricsHighlight(audio.currentTime);
+        });
+
+        audio.addEventListener('ended', () => {
+            if (repeatMode === 2) {
+                audio.currentTime = 0;
+                playTrack();
+            } else {
+                playNext();
+            }
+        });
+
+        seekBar.addEventListener('input', (e) => {
+            if (!audio.duration) return;
+            const seekTo = (e.target.value / 100) * audio.duration;
+            audio.currentTime = seekTo;
+        });
+
+        volumeBar.addEventListener('input', (e) => {
+            audio.volume = e.target.value;
+        });
+
+        function formatTime(seconds) {
+            const min = Math.floor(seconds / 60);
+            const sec = Math.floor(seconds % 60);
+            return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+        }
+
+        // --- RENDER FUNCTIONS ---
+
+        function renderPlaylist() {
+            playlistView.innerHTML = '';
+            playlist.forEach((track, index) => {
+                const isActive = index === currentIndex;
+                const trackCard = document.createElement('div');
+                trackCard.className = `flex items-center gap-4 p-3 rounded-2xl cursor-pointer transition-all duration-300 border ${
+                    isActive 
+                    ? 'bg-yellow-500/15 border-yellow-500/40 shadow-lg shadow-yellow-500/10' 
+                    : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/10'
+                }`;
+
+                trackCard.onclick = () => {
+                    loadTrack(index);
+                    playTrack();
+                };
+
+                trackCard.innerHTML = `
+                    <div class="relative w-12 h-12 rounded-xl overflow-hidden shrink-0">
+                        <img src="${track.cover}" alt="${track.title}" class="w-full h-full object-cover">
+                        ${isActive && isPlaying ? `
+                            <div class="absolute inset-0 bg-black/50 flex items-center justify-center">
+                                <div class="flex items-end gap-0.5 h-4">
+                                    <div class="eq-bar"></div>
+                                    <div class="eq-bar"></div>
+                                    <div class="eq-bar"></div>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-sm font-bold text-gray-100 truncate ${isActive ? 'text-yellow-400' : ''}">${track.title}</h4>
+                        <p class="text-xs text-gray-400 truncate">${track.artist} • ${track.album}</p>
+                    </div>
+                    <div class="text-xs font-semibold text-gray-400">
+                        ${track.duration}
+                    </div>
+                `;
+                playlistView.appendChild(trackCard);
+            });
+        }
+
+        function renderLyrics(lyrics) {
+            lyricsLinesContainer.innerHTML = '';
+            lyrics.forEach((item, i) => {
+                const p = document.createElement('p');
+                p.id = `lyric-line-${i}`;
+                p.className = 'lyric-line text-sm sm:text-base font-serif italic py-1';
+                p.innerText = item.text;
+                lyricsLinesContainer.appendChild(p);
+            });
+        }
+
+        function updateLyricsHighlight(currentTime) {
+            const track = playlist[currentIndex];
+            if (!track || !track.lyrics) return;
+
+            let activeLineIndex = 0;
+            for (let i = 0; i < track.lyrics.length; i++) {
+                if (currentTime >= track.lyrics[i].time) {
+                    activeLineIndex = i;
+                }
+            }
+
+            track.lyrics.forEach((_, i) => {
+                const lineEl = document.getElementById(`lyric-line-${i}`);
+                if (lineEl) {
+                    if (i === activeLineIndex) {
+                        lineEl.classList.add('active');
+                        lineEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    } else {
+                        lineEl.classList.remove('active');
+                    }
+                }
+            });
+        }
+
+        function switchRightTab(tab) {
+            const playlistBtn = document.getElementById('tab-playlist-btn');
+            const lyricsBtn = document.getElementById('tab-lyrics-btn');
+
+            if (tab === 'playlist') {
+                playlistView.classList.remove('hidden');
+                lyricsView.classList.add('hidden');
+
+                playlistBtn.className = "text-sm font-bold text-yellow-400 border-b-2 border-yellow-400 pb-1 mr-6 transition-all";
+                lyricsBtn.className = "text-sm font-semibold text-gray-400 hover:text-gray-200 pb-1 transition-all";
+            } else {
+                playlistView.classList.add('hidden');
+                lyricsView.classList.remove('hidden');
+
+                lyricsBtn.className = "text-sm font-bold text-yellow-400 border-b-2 border-yellow-400 pb-1 transition-all";
+                playlistBtn.className = "text-sm font-semibold text-gray-400 hover:text-gray-200 pb-1 mr-6 transition-all";
+            }
+        }
+
+        function toggleLyricsDrawer() {
+            switchRightTab('lyrics');
+        }
+
+        // --- VISUAL BACKGROUND CANVAS ENGINE ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let particles = [];
+        let meshBlobs = [];
+
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initThemeElements();
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        // Theme Definitions
+        function setThemeMode(mode) {
+            themeMode = mode;
+            document.querySelectorAll('[id^="btn-theme-"]').forEach(btn => {
+                btn.className = "px-3 py-1.5 rounded-full transition-all text-gray-400 hover:text-white";
+            });
+            const activeBtn = document.getElementById(`btn-theme-${mode}`);
+            if (activeBtn) {
+                activeBtn.className = "px-3 py-1.5 rounded-full transition-all text-yellow-400 bg-white/10 shadow";
+            }
+            initThemeElements();
+        }
+
+        function initThemeElements() {
+            particles = [];
+            meshBlobs = [];
+
+            if (themeMode === 'mesh') {
+                // โทนสี Deep Blue & Electric Indigo ตามภาพ
+                const colors = [
+                    'rgba(29, 78, 216, 0.45)',   // Royal Blue (น้ำเงินเข้มเข้ม)
+                    'rgba(59, 130, 246, 0.35)',  // Electric Blue (ฟ้าสว่าง)
+                    'rgba(67, 56, 202, 0.40)',   // Deep Indigo (ม่วงน้ำเงิน)
+                    'rgba(14, 165, 233, 0.30)'   // Bright Cyan Glow (ฟ้าเรืองแสง)
+                ];
+                for (let i = 0; i < 6; i++) {
+                    meshBlobs.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        radius: Math.random() * 250 + 200,
+                        color: colors[i % colors.length],
+                        vx: (Math.random() - 0.5) * 0.8,
+                        vy: (Math.random() - 0.5) * 0.8
+                    });
+                }
+            } else if (themeMode === 'stars') {
+                // Starry Night Dust
+                for (let i = 0; i < 90; i++) {
+                    particles.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        radius: Math.random() * 2 + 0.5,
+                        alpha: Math.random(),
+                        vx: (Math.random() - 0.5) * 0.3,
+                        vy: (Math.random() - 0.5) * 0.3
+                    });
+                }
+            } else if (themeMode === 'sunset') {
+                // Horizon Waves / Sun Orbs
+                meshBlobs.push({
+                    x: width * 0.5,
+                    y: height * 0.7,
+                    radius: Math.min(width, height) * 0.4,
+                    color: 'rgba(234, 88, 12, 0.35)',
+                    vx: 0,
+                    vy: 0
+                });
+                meshBlobs.push({
+                    x: width * 0.5,
+                    y: height * 0.8,
+                    radius: Math.min(width, height) * 0.6,
+                    color: 'rgba(147, 51, 234, 0.3)',
+                    vx: 0,
+                    vy: 0
+                });
+            }
+        }
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, width, height);
+
+            // Base Background Tint
+            ctx.fillStyle = '#08070b';
+            ctx.fillRect(0, 0, width, height);
+
+            const speedMultiplier = isPlaying ? 1.6 : 1.0;
+
+            if (themeMode === 'mesh' || themeMode === 'sunset') {
+                meshBlobs.forEach(blob => {
+                    blob.x += blob.vx * speedMultiplier;
+                    blob.y += blob.vy * speedMultiplier;
+
+                    if (blob.x < -100 || blob.x > width + 100) blob.vx *= -1;
+                    if (blob.y < -100 || blob.y > height + 100) blob.vy *= -1;
+
+                    const grad = ctx.createRadialGradient(blob.x, blob.y, 0, blob.x, blob.y, blob.radius);
+                    grad.addColorStop(0, blob.color);
+                    grad.addColorStop(1, 'rgba(0,0,0,0)');
+
+                    ctx.fillStyle = grad;
+                    ctx.beginPath();
+                    ctx.arc(blob.x, blob.y, blob.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+            }
+
+            if (themeMode === 'stars') {
+                particles.forEach(p => {
+                    p.x += p.vx * speedMultiplier;
+                    p.y += p.vy * speedMultiplier;
+
+                    if (p.x < 0) p.x = width;
+                    if (p.x > width) p.x = 0;
+                    if (p.y < 0) p.y = height;
+                    if (p.y > height) p.y = 0;
+
+                    ctx.fillStyle = `rgba(255, 235, 180, ${p.alpha})`;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+            }
+
+            requestAnimationFrame(animateCanvas);
+        }
+
+        // Initialize Canvas & App on Load
+        window.onload = function() {
+            resizeCanvas();
+            animateCanvas();
+            loadTrack(0);
+        };
+    </script>
+</body>
+</html>
